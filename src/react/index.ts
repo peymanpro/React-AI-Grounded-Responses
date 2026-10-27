@@ -117,7 +117,6 @@ function defaultClaimElement(
     "data-claim-ids": string;
     "data-integrity-status": ClaimIntegrityStatus;
   } = {
-    key: "claim-" + index,
     className: "rai-grounded-response__claim",
     "data-claim-id": primary.claim.id,
     "data-claim-ids": claimIds,
@@ -139,7 +138,7 @@ function defaultClaimElement(
     };
   }
 
-  return createElement("span", props, segment.text);
+  return createElement("span", { key: "claim-" + index, ...props }, segment.text);
 }
 
 function renderGroundedSnapshot(
