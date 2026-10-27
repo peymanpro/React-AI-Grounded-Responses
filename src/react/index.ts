@@ -38,21 +38,21 @@ interface PositionedClaim {
   readonly end: number;
 }
 
+interface SharedGroundedResponseProps {
+  readonly className?: string;
+  readonly onClaimSelect?: (claim: Claim, status: ClaimIntegrityStatus) => void;
+  readonly renderClaim?: (segment: GroundedSegment) => ReactNode;
+}
+
 export type GroundedResponseProps =
-  | {
+  | (SharedGroundedResponseProps & {
       readonly snapshot: GroundedResponseSnapshot;
       readonly ledger?: never;
-      readonly className?: string;
-      readonly onClaimSelect?: (claim: Claim, status: ClaimIntegrityStatus) => void;
-      readonly renderClaim?: (segment: GroundedSegment) => ReactNode;
-    }
-  | {
+    })
+  | (SharedGroundedResponseProps & {
       readonly ledger: GroundedResponseLedger;
       readonly snapshot?: never;
-      readonly className?: string;
-      readonly onClaimSelect?: (claim: Claim, status: ClaimIntegrityStatus) => void;
-      readonly renderClaim?: (segment: GroundedSegment) => ReactNode;
-    };
+    });
 
 function createSegments(text: string, claims: readonly ClaimRecord[]): GroundedSegment[] {
   const positioned: PositionedClaim[] = [];
@@ -137,18 +137,10 @@ function defaultClaimElement(
   return createElement("span", props, segment.text);
 }
 
-/**
- * Renders a response as plain text segments linked to their claim records.
- * Pass a serializable snapshot when rendering from a Next.js Server Component.
- */
-export function GroundedResponse(props: GroundedResponseProps): ReactNode {
-  const snapshot = props.ledger
-    ? useGroundedResponse(props.ledger)
-    : props.snapshot;
-  if (!snapshot) {
-    return null;
-  }
-
+function renderGroundedSnapshot(
+  snapshot: GroundedResponseSnapshot,
+  props: SharedGroundedResponseProps,
+): ReactNode {
   const segments = createSegments(snapshot.text, snapshot.claims);
   const children = segments.map((segment, index) => {
     if (segment.claims.length > 0 && props.renderClaim) {
@@ -169,6 +161,30 @@ export function GroundedResponse(props: GroundedResponseProps): ReactNode {
     },
     ...children,
   );
+}
+
+function LiveGroundedResponse(
+  props: SharedGroundedResponseProps & { readonly ledger: GroundedResponseLedger },
+): ReactNode {
+  const snapshot = useGroundedResponse(props.ledger);
+  return renderGroundedSnapshot(snapshot, props);
+}
+
+/**
+ * Renders a response linked to its claim records.
+ * Pass a serializable snapshot from a Next.js Server Component. Pass a ledger
+ * only to a React component that is already running on the client.
+ */
+export function GroundedResponse(props: GroundedResponseProps): ReactNode {
+  if (props.ledger) {
+    return createElement(LiveGroundedResponse, {
+      ledger: props.ledger,
+      className: props.className,
+      onClaimSelect: props.onClaimSelect,
+      renderClaim: props.renderClaim,
+    });
+  }
+  return renderGroundedSnapshot(props.snapshot, props);
 }
 
 export interface EvidencePanelProps {
@@ -253,7 +269,7 @@ export interface ClaimIntegrityProps {
   readonly className?: string;
 }
 
-/** Displays an explicit structural status without implying semantic truth. */
+/** Displays an explicit structural status without styling dependencies. */
 export function ClaimIntegrity(props: ClaimIntegrityProps): ReactNode {
   return createElement(
     "span",
