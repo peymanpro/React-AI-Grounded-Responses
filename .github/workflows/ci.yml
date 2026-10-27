@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Node ${{ matrix.node }} / core and React
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24, 26]
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Unit tests
+        run: npm test
+      - name: Build package
+        run: npm run build
+      - name: Verify npm package contents
+        run: npm run check:package
+
+  nextjs:
+    name: Next.js App Router production build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 26
+      - name: Install library development dependencies
+        run: npm install --no-audit --no-fund
+      - name: Build library
+        run: npm run build
+      - name: Install example dependencies
+        run: npm install --prefix examples/nextjs-app --no-audit --no-fund
+      - name: Build Next.js example
+        run: npm run build --prefix examples/nextjs-app

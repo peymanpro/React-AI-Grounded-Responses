@@ -1,0 +1,88 @@
+{
+  "name": "react-ai-grounded-responses",
+  "version": "0.1.0",
+  "description": "A TypeScript library for inspectable, evidence-linked AI responses in React and Next.js.",
+  "license": "MIT",
+  "author": "Peyman Salimi",
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "docs",
+    "examples"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "clean": "node --input-type=module -e \"import { rm } from 'node:fs/promises'; await rm('dist', { recursive: true, force: true })\"",
+    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "tsx --test test/*.test.ts",
+    "prepack": "npm run build",
+    "check:package": "npm pack --dry-run",
+    "release": "semantic-release"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^12.0.2",
+    "@semantic-release/npm": "^13.1.2",
+    "@semantic-release/release-notes-generator": "^14.0.3",
+    "@types/node": "^22.15.30",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.7",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "semantic-release": "^25.0.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
+  },
+  "keywords": [
+    "react",
+    "nextjs",
+    "next.js",
+    "ai",
+    "llm",
+    "rag",
+    "citations",
+    "evidence",
+    "grounded-generation",
+    "streaming",
+    "typescript",
+    "source-attribution"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peymanpro/React-AI-Grounded-Responses.git"
+  },
+  "bugs": {
+    "url": "https://github.com/peymanpro/React-AI-Grounded-Responses/issues"
+  },
+  "homepage": "https://github.com/peymanpro/React-AI-Grounded-Responses#readme"
+}
