@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { fingerprintText } from "../src/fingerprint.js";
 import { createGroundedResponseLedger } from "../src/ledger.js";
 import { ClaimIntegrity, EvidencePanel, GroundedResponse } from "../src/react/index.js";
 import type { Source } from "../src/types.js";
@@ -72,4 +73,61 @@ test("renders integrity status without styling dependencies", () => {
   const markup = renderToStaticMarkup(createElement(ClaimIntegrity, { status: "stale" }));
   assert.match(markup, /data-integrity-status="stale"/);
   assert.match(markup, /stale/);
+});
+
+
+test("does not highlight evidence whose recorded quote no longer matches the source span", () => {
+  const source: Source = {
+    id: "policy",
+    text: "Refunds are available within 14 days.",
+  };
+  const markup = renderToStaticMarkup(
+    createElement(EvidencePanel, {
+      source,
+      evidence: [{
+        sourceId: source.id,
+        start: source.text.indexOf("14 days"),
+        end: source.text.indexOf("14 days") + "14 days".length,
+        quote: "30 days",
+      }],
+    }),
+  );
+  assert.doesNotMatch(markup, /<mark/);
+});
+
+test("does not highlight evidence tied to an older source fingerprint", () => {
+  const oldText = "Refunds are available within 14 days.";
+  const source: Source = {
+    id: "policy",
+    text: "Refunds are available within 30 days.",
+    version: "v2",
+  };
+  const oldQuote = "14 days";
+  const markup = renderToStaticMarkup(
+    createElement(EvidencePanel, {
+      source,
+      evidence: [{
+        sourceId: source.id,
+        start: source.text.indexOf("30 days"),
+        end: source.text.indexOf("30 days") + "30 days".length,
+        quote: "30 days",
+        sourceVersion: "v1",
+        sourceFingerprint: fingerprintText(oldText),
+      }],
+    }),
+  );
+  assert.doesNotMatch(markup, /<mark/);
+});
+
+test("does not render source links with non-HTTP protocols", () => {
+  const source: Source = {
+    id: "untrusted",
+    text: "Untrusted source text.",
+    uri: "javascript:alert(1)",
+  };
+  const markup = renderToStaticMarkup(
+    createElement(EvidencePanel, { source, evidence: [] }),
+  );
+  assert.doesNotMatch(markup, /href=/);
+  assert.doesNotMatch(markup, /Open original source/);
 });
