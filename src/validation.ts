@@ -119,13 +119,23 @@ export function validateClaim(
       !Number.isInteger(span.start) ||
       !Number.isInteger(span.end) ||
       span.start < 0 ||
-      span.end <= span.start ||
-      span.end > countOffsetUnits(source.text, unit)
+      span.end <= span.start
     ) {
       issues.push(
         makeIssue(
+          "invalid_range",
+          "The evidence range must use non-negative integer offsets with end greater than start.",
+          span.sourceId,
+        ),
+      );
+      continue;
+    }
+
+    if (span.end > countOffsetUnits(source.text, unit)) {
+      issues.push(
+        makeIssue(
           "span_out_of_bounds",
-          "The evidence span is outside the source text or has invalid offsets.",
+          "The evidence span extends beyond the source text.",
           span.sourceId,
         ),
       );

@@ -2,12 +2,16 @@ import type { NumericCitationMarker, ParsedCitationMarker } from "./types.js";
 
 export function parseNumericCitations(text: string): readonly NumericCitationMarker[] {
   const markers: NumericCitationMarker[] = [];
-  const pattern = /\[(\d+)\]/g;
+  const pattern = /\[([1-9]\d*)\]/g;
   let match: RegExpExecArray | null;
 
   while ((match = pattern.exec(text)) !== null) {
+    const referenceIndex = Number(match[1]);
+    if (!Number.isSafeInteger(referenceIndex) || referenceIndex <= 0) {
+      continue;
+    }
     markers.push({
-      referenceIndex: Number(match[1]),
+      referenceIndex,
       start: match.index,
       end: match.index + match[0].length,
     });
@@ -83,15 +87,16 @@ export class StreamingCitationParser {
       }
 
       const candidate = this.pending.slice(0, closingIndex + 1);
-      const match = /^\[(\d+)\]$/.exec(candidate);
-      if (!match) {
+      const match = /^\[([1-9]\d*)\]$/.exec(candidate);
+      const referenceIndex = match ? Number(match[1]) : Number.NaN;
+      if (!match || !Number.isSafeInteger(referenceIndex) || referenceIndex <= 0) {
         this.emitText("[");
         this.pending = this.pending.slice(1);
         continue;
       }
 
       this.citations.push({
-        referenceIndex: Number(match[1]),
+        referenceIndex,
         start: this.rawOffset,
         end: this.rawOffset + candidate.length,
         renderedOffset: this.renderedText.length,

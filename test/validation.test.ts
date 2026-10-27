@@ -126,3 +126,16 @@ test("supports explicit quote normalization supplied by the application", () => 
   );
   assert.equal(result.status, "valid");
 });
+
+
+test("distinguishes malformed evidence ranges from ranges beyond the source", () => {
+  const result = validateClaim(
+    claim({
+      evidence: [{ sourceId: source.id, start: -1, end: 2 }],
+    }),
+    [source],
+    { responseText: "Refunds are available within 14 days." },
+  );
+  assert.equal(result.status, "invalid_range");
+  assert.equal(result.issues[0]?.code, "invalid_range");
+});

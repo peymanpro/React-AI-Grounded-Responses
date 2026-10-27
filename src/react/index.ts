@@ -7,6 +7,7 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from "react";
+import { fingerprintText } from "../fingerprint.js";
 import { rangeToUtf16 } from "../offsets.js";
 import type {
   Claim,
@@ -204,19 +205,54 @@ interface PositionedEvidence {
   readonly end: number;
 }
 
-/** Renders the source text with each valid evidence span highlighted. */
+function safeSourceHref(uri?: string): string | undefined {
+  if (!uri) {
+    return undefined;
+  }
+
+  try {
+    const url = new URL(uri);
+    return url.protocol === "https:" || url.protocol === "http:"
+      ? url.href
+      : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/** Renders the source text with structurally valid, current evidence highlighted. */
 export function EvidencePanel(props: EvidencePanelProps): ReactNode {
   const positioned: PositionedEvidence[] = [];
   const boundaries = new Set<number>([0, props.source.text.length]);
+  const currentFingerprint = fingerprintText(props.source.text);
 
   for (const span of props.evidence) {
     if (span.sourceId !== props.source.id) {
       continue;
     }
+    if (
+      span.sourceVersion !== undefined &&
+      span.sourceVersion !== props.source.version
+    ) {
+      continue;
+    }
+    if (
+      span.sourceFingerprint !== undefined &&
+      span.sourceFingerprint !== currentFingerprint
+    ) {
+      continue;
+    }
+
     const range = rangeToUtf16(props.source.text, span);
     if (!range) {
       continue;
     }
+
+    const sourceQuote = props.source.text.slice(range.start, range.end);
+    if (span.quote !== undefined && sourceQuote !== span.quote) {
+      continue;
+    }
+
     positioned.push({ span, start: range.start, end: range.end });
     boundaries.add(range.start);
     boundaries.add(range.end);
@@ -249,6 +285,7 @@ export function EvidencePanel(props: EvidencePanelProps): ReactNode {
   }
 
   const title = props.title ?? props.source.title ?? "Source: " + props.source.id;
+  const sourceHref = safeSourceHref(props.source.uri);
   return createElement(
     "aside",
     {
@@ -258,10 +295,10 @@ export function EvidencePanel(props: EvidencePanelProps): ReactNode {
     },
     createElement("h2", null, title),
     createElement("pre", null, createElement("code", null, ...chunks)),
-    props.source.uri
+    sourceHref
       ? createElement(
           "a",
-          { href: props.source.uri, rel: "noreferrer", target: "_blank" },
+          { href: sourceHref, rel: "noreferrer", target: "_blank" },
           "Open original source",
         )
       : null,
