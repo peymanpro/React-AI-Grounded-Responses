@@ -102,7 +102,6 @@ test("does not highlight evidence tied to an older source fingerprint", () => {
     text: "Refunds are available within 30 days.",
     version: "v2",
   };
-  const oldQuote = "14 days";
   const markup = renderToStaticMarkup(
     createElement(EvidencePanel, {
       source,
