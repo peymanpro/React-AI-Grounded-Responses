@@ -1,0 +1,129 @@
+:root {
+  color-scheme: light;
+  --ink: #172033;
+  --muted: #58647a;
+  --line: #dce2eb;
+  --paper: #f6f8fb;
+  --accent: #2457d6;
+  --evidence: #d5f7df;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.6;
+}
+
+.page {
+  margin: 0 auto;
+  max-width: 850px;
+  padding: 64px 24px;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+h1 {
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin: 16px 0;
+}
+
+.intro {
+  color: var(--muted);
+  font-size: 1.1rem;
+  max-width: 660px;
+}
+
+.demo {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  margin-top: 36px;
+  padding: 28px;
+  box-shadow: 0 14px 40px rgb(24 39 75 / 8%);
+}
+
+.rai-grounded-response {
+  font-size: 1.2rem;
+  line-height: 2;
+}
+
+.rai-grounded-response__claim {
+  background: #e8efff;
+  border-bottom: 2px solid var(--accent);
+  cursor: pointer;
+  padding: 2px 3px;
+}
+
+.rai-grounded-response__claim:focus-visible {
+  border-radius: 3px;
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.status-row {
+  align-items: center;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 20px;
+}
+
+.rai-claim-integrity {
+  background: #edf8f0;
+  border: 1px solid #b5e2c0;
+  border-radius: 999px;
+  color: #1f6333;
+  display: inline-block;
+  font-size: 0.85rem;
+  padding: 3px 10px;
+}
+
+.rai-evidence-panel {
+  margin-top: 24px;
+}
+
+.rai-evidence-panel h2 {
+  font-size: 1rem;
+}
+
+.rai-evidence-panel pre {
+  background: #f7f9fc;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: auto;
+  padding: 18px;
+  white-space: pre-wrap;
+}
+
+.rai-evidence-panel mark {
+  background: var(--evidence);
+  border-radius: 3px;
+  color: inherit;
+  padding: 1px 2px;
+}
+
+.rai-evidence-panel a {
+  color: var(--accent);
+}
