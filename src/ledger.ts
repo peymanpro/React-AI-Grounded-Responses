@@ -147,7 +147,15 @@ export class GroundedResponseLedger {
       Array.from(this.claimById.values()).map((claim) =>
         Object.freeze({
           claim,
-          validation: validateClaim(claim, sourceList, { responseText: this.textValue }),
+          validation: (() => {
+            const validation = validateClaim(claim, sourceList, { responseText: this.textValue });
+            return Object.freeze({
+              ...validation,
+              issues: Object.freeze(
+                validation.issues.map((issue) => Object.freeze({ ...issue })),
+              ),
+            });
+          })(),
         }),
       ),
     );
