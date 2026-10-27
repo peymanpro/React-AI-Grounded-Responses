@@ -9,23 +9,28 @@ const source: Source = {
   version: "1",
 };
 
+const responseText = "The supported limit is 10 requests per minute.";
+const quote = "10 requests per minute";
+const responseStart = responseText.indexOf(quote);
+const sourceStart = source.text.indexOf(quote);
+
 const claim: Claim = {
   id: "limit",
-  text: "10 requests per minute",
-  responseRange: { start: 20, end: 43 },
+  text: quote,
+  responseRange: { start: responseStart, end: responseStart + quote.length },
   evidence: [
     {
       sourceId: source.id,
-      start: 25,
-      end: 48,
-      quote: "10 requests per minute.",
+      start: sourceStart,
+      end: sourceStart + quote.length,
+      quote,
       sourceVersion: "1",
     },
   ],
 };
 
 test("returns a stable snapshot reference until the ledger changes", () => {
-  const ledger = createGroundedResponseLedger({ text: "The limit is 10 requests per minute.", sources: [source] });
+  const ledger = createGroundedResponseLedger({ text: responseText, sources: [source] });
   assert.equal(ledger.snapshot(), ledger.snapshot());
   const before = ledger.snapshot();
   ledger.appendText(" More information.");
@@ -48,7 +53,7 @@ test("notifies subscribers when state changes and supports unsubscribe", () => {
 
 test("keeps snapshots immutable and reports validation counts", () => {
   const ledger = createGroundedResponseLedger({
-    text: "The supported limit is 10 requests per minute",
+    text: responseText,
     sources: [source],
     claims: [claim],
   });
@@ -63,7 +68,7 @@ test("keeps snapshots immutable and reports validation counts", () => {
 
 test("revalidates claims when a source is removed or replaced", () => {
   const ledger = createGroundedResponseLedger({
-    text: "The supported limit is 10 requests per minute.",
+    text: responseText,
     sources: [source],
     claims: [claim],
   });
