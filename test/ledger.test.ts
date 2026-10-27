@@ -64,6 +64,12 @@ test("keeps snapshots immutable and reports validation counts", () => {
   assert.throws(() => {
     (snapshot.sources as Source[]).push({ id: "other", text: "bad" });
   });
+  assert.throws(() => {
+    (snapshot.claims[0]!.validation.issues as unknown as Array<{ code: string; message: string }>).push({
+      code: "source_missing",
+      message: "mutation",
+    });
+  });
 });
 
 test("revalidates claims when a source is removed or replaced", () => {
