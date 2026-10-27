@@ -3,6 +3,7 @@
 import {
   createElement,
   useSyncExternalStore,
+  type HTMLAttributes,
   type KeyboardEvent,
   type ReactNode,
 } from "react";
@@ -111,7 +112,11 @@ function defaultClaimElement(
 
   const primary = segment.claims[0]!;
   const claimIds = segment.claims.map((record) => record.claim.id).join(" ");
-  const props: Record<string, unknown> = {
+  const props: HTMLAttributes<HTMLSpanElement> & {
+    "data-claim-id": string;
+    "data-claim-ids": string;
+    "data-integrity-status": ClaimIntegrityStatus;
+  } = {
     key: "claim-" + index,
     className: "rai-grounded-response__claim",
     "data-claim-id": primary.claim.id,
