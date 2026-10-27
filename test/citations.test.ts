@@ -45,3 +45,18 @@ test("does not accept more chunks after finish", () => {
   parser.finish();
   assert.throws(() => parser.push("later"), /finished citation stream/);
 });
+
+
+test("ignores zero, leading-zero, and unsafe numeric citation indices", () => {
+  assert.deepEqual(parseNumericCitations("[0] [01] [999999999999999999999999] [2]"), [
+    { referenceIndex: 2, start: 36, end: 39 },
+  ]);
+});
+
+test("preserves invalid numeric markers as ordinary text in a stream", () => {
+  const parser = new StreamingCitationParser();
+  parser.push("A [0] B [01] C [999999999999999999999999] D [3]");
+  const result = parser.finish();
+  assert.equal(result.text, "A [0] B [01] C [999999999999999999999999] D ");
+  assert.deepEqual(result.citations.map((citation) => citation.referenceIndex), [3]);
+});
