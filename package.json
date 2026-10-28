@@ -1,6 +1,6 @@
 {
   "name": "react-ai-grounded-responses",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Provider-neutral TypeScript library for evidence-grounded AI responses, with claim–evidence ledgers, streaming state, source integrity validation, Unicode-safe offsets, and React/Next.js integration.",
   "license": "MIT",
   "author": "Peyman Salimi",

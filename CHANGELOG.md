@@ -1,3 +1,10 @@
+## [0.1.2](https://github.com/peymanpro/React-AI-Grounded-Responses/compare/v0.1.1...v0.1.2) (2026-10-28)
+
+
+### Bug Fixes
+
+* **docs:** align package description with About and README ([dc97304](https://github.com/peymanpro/React-AI-Grounded-Responses/commit/dc97304d99e183730ad5c3431c79d9cac4c813f0))
+
 ## [0.1.1](https://github.com/peymanpro/React-AI-Grounded-Responses/compare/v0.1.0...v0.1.1) (2026-10-28)
 
 
