@@ -1,6 +1,6 @@
 # React AI Grounded Responses
 
-A TypeScript library for inspectable, evidence-linked AI responses in React and Next.js.
+Provider-neutral TypeScript library for evidence-grounded AI responses, with claim–evidence ledgers, streaming state, source integrity validation, Unicode-safe offsets, and React/Next.js integration.
 
 [![CI](https://github.com/peymanpro/React-AI-Grounded-Responses/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/peymanpro/React-AI-Grounded-Responses/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
