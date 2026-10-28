@@ -34,16 +34,26 @@ This project focuses on the reusable layer between AI output and the user interf
 
 - Node.js 22 or later for development and tests.
 - React 18.2 or 19 when using the optional React entry point.
-- npm for the maintainer workflow. Consumers can use npm, pnpm, or another compatible package manager.
+- npm for the maintainer release workflow. Consumers can install the package with npm, pnpm, Yarn, or Bun.
 
 The core entry point is independent of React. React is a peer dependency and is only needed when importing the React adapter.
 
 ## Installation
 
-The package is being prepared for its first npm release. Once published, install it with:
+Choose the command for the package manager used by your project; you only need to run one of these:
 
 ```bash
+# npm
 npm install react-ai-grounded-responses
+
+# pnpm
+pnpm add react-ai-grounded-responses
+
+# Yarn
+yarn add react-ai-grounded-responses
+
+# Bun
+bun add react-ai-grounded-responses
 ```
 
 ## Quick start: create a grounded response ledger
@@ -171,7 +181,7 @@ The release workflow follows Conventional Commits and semantic versioning. After
 | feat!: or BREAKING CHANGE footer | Major |
 | docs:, test:, ci:, chore:, refactor: | No release by default |
 
-The first publication requires one manual npm setup step because a Trusted Publisher must be configured for an existing package. Follow [Release process](docs/releasing.md). Do not run the initial-release workflow until the package name is confirmed available, the placeholder package has been created, and npm Trusted Publishing is configured for this repository.
+The initial release (`0.1.0`) is published. npm Trusted Publishing is configured and validated for this repository. Future qualifying commits merged into `main` are handled by the automated release workflow; do not select the `initial_release` option again. See [Release process](docs/releasing.md).
 
 ## Security
 
