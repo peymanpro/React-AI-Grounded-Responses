@@ -34,16 +34,26 @@ This project focuses on the reusable layer between AI output and the user interf
 
 - Node.js 22 or later for development and tests.
 - React 18.2 or 19 when using the optional React entry point.
-- npm for the maintainer workflow. Consumers can use npm, pnpm, or another compatible package manager.
+- npm for the maintainer release workflow. Consumers can install the package with npm, pnpm, Yarn, or Bun.
 
 The core entry point is independent of React. React is a peer dependency and is only needed when importing the React adapter.
 
 ## Installation
 
-Install the published package from npm:
+Choose the command for the package manager used by your project; you only need to run one of these:
 
 ```bash
+# npm
 npm install react-ai-grounded-responses
+
+# pnpm
+pnpm add react-ai-grounded-responses
+
+# Yarn
+yarn add react-ai-grounded-responses
+
+# Bun
+bun add react-ai-grounded-responses
 ```
 
 ## Quick start: create a grounded response ledger
