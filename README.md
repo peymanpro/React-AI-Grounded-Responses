@@ -40,7 +40,7 @@ The core entry point is independent of React. React is a peer dependency and is 
 
 ## Installation
 
-The package is being prepared for its first npm release. Once published, install it with:
+Install the published package from npm:
 
 ```bash
 npm install react-ai-grounded-responses
@@ -171,7 +171,7 @@ The release workflow follows Conventional Commits and semantic versioning. After
 | feat!: or BREAKING CHANGE footer | Major |
 | docs:, test:, ci:, chore:, refactor: | No release by default |
 
-The first publication requires one manual npm setup step because a Trusted Publisher must be configured for an existing package. Follow [Release process](docs/releasing.md). Do not run the initial-release workflow until the package name is confirmed available, the placeholder package has been created, and npm Trusted Publishing is configured for this repository.
+The initial release (`0.1.0`) is published. npm Trusted Publishing is configured and validated for this repository. Future qualifying commits merged into `main` are handled by the automated release workflow; do not select the `initial_release` option again. See [Release process](docs/releasing.md).
 
 ## Security
 
