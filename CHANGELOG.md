@@ -1,3 +1,10 @@
+## [0.1.1](https://github.com/peymanpro/React-AI-Grounded-Responses/compare/v0.1.0...v0.1.1) (2026-10-28)
+
+
+### Bug Fixes
+
+* **docs:** update installation options and post-release docs ([340345e](https://github.com/peymanpro/React-AI-Grounded-Responses/commit/340345ec92653129e6bd5c8262e101b4f49c059d))
+
 # Changelog
 
 All notable changes to this project are documented here.
